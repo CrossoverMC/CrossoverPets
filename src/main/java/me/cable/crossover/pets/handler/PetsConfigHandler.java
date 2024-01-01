@@ -58,7 +58,7 @@ public class PetsConfigHandler {
             PetsPlayer petsPlayer = PlayerHandler.getPlayer(player);
 
             for (EquippedPet equippedPet : petsPlayer.getEquippedPets()) {
-                String id = equippedPet.petId();
+                String id = equippedPet.getPetId();
 
                 if (!isPetValid(id)) {
                     petsPlayer.unequipPet(id);

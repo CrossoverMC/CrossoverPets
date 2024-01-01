@@ -3,3 +3,21 @@ dog:
   name: "Dog"
   description:
     - "This is a dog lol."
+  big: false
+  movement:
+    cooldown: "60,120"
+    types:
+      follow:
+        enabled: false
+        distance: 3.0 # distance around player that pet will stop following
+        speed: 0.15
+        trigger-distance: 10.0 # distance away from player that pets starts to follow
+      jump:
+        enabled: false
+        duration: 10
+        height: 1.0
+      walk:
+        enabled: false
+        radius-min: 3.5
+        radius-max: 3.5
+        speed: 0.15

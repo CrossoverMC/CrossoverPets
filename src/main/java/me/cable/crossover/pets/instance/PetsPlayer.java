@@ -6,6 +6,8 @@ import me.cable.crossover.main.util.ItemBuilder;
 import me.cable.crossover.pets.handler.PetsConfigHandler;
 import me.cable.crossover.pets.handler.PlayerHandler;
 import me.cable.crossover.pets.handler.SettingsHandler;
+import me.cable.crossover.pets.movement.*;
+import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
@@ -48,11 +50,11 @@ public class PetsPlayer {
     public void cleanup() {
         // save equipped pets
         YamlConfiguration playerData = PlayerData.get(player.getUniqueId());
-        List<String> ep = equippedPets.stream().map(EquippedPet::petId).toList();
+        List<String> ep = equippedPets.stream().map(EquippedPet::getPetId).toList();
         playerData.set(PlayerHandler.PLAYER_DATA_PATH_PETS_EQUIPPED, ep);
 
         for (EquippedPet equippedPet : equippedPets) {
-            equippedPet.armorStand().remove();
+            equippedPet.getArmorStand().remove();
         }
     }
 
@@ -62,7 +64,7 @@ public class PetsPlayer {
 
     public boolean hasPetEquipped(@NotNull String petId) {
         for (EquippedPet equippedPet : equippedPets) {
-            if (equippedPet.petId().equals(petId)) {
+            if (equippedPet.getPetId().equals(petId)) {
                 return true;
             }
         }
@@ -106,7 +108,7 @@ public class PetsPlayer {
                     .create());
         }
         for (int i = 0; i < Math.min(allSlots.size(), equippedPets.size()); i++) {
-            String equippedPetId = equippedPets.get(i).petId();
+            String equippedPetId = equippedPets.get(i).getPetId();
             ConfigHelper petConfig = PetsConfigHandler.getConfig().ch(equippedPetId);
             ItemStack item = new ItemBuilder()
                     .config(SettingsHandler.getConfig().csnn("pet-slots.items.pet"))
@@ -120,22 +122,40 @@ public class PetsPlayer {
     }
 
     private void equipPetInternal(@NotNull String petId) {
-        ArmorStand armorStand = player.getWorld().spawn(player.getLocation(), ArmorStand.class, a -> {
+        ConfigHelper petConfig = PetsConfigHandler.getConfig().ch(petId);
+        boolean small = !petConfig.bool("big");
+        Location spawnLoc = player.getLocation().subtract(0, Movement.getBodyHeight(small), 0);
+
+        ArmorStand armorStand = player.getWorld().spawn(spawnLoc, ArmorStand.class, a -> {
             a.setGravity(false);
             a.setInvisible(true);
             a.setInvulnerable(true);
             a.setMarker(true);
-            a.setSmall(true);
+            a.setSmall(small);
 
             EntityEquipment entityEquipment = a.getEquipment();
 
             if (entityEquipment != null) {
-                int hdbId = PetsConfigHandler.getConfig().integer(petId + ".hdb");
+                int hdbId = petConfig.integer("hdb");
                 entityEquipment.setHelmet(new ItemBuilder().hdb(hdbId).create());
             }
         });
 
         EquippedPet equippedPet = new EquippedPet(petId, armorStand);
+
+        List<Movement> movements = List.of(
+                new FollowMovement(equippedPet, player),
+                new JumpMovement(equippedPet, player),
+                new OrbitMovement(equippedPet, player),
+                new WalkMovement(equippedPet, player)
+        );
+
+        for (Movement movement : movements) {
+            if (petConfig.bool("movement.types." + movement.id() + ".enabled")) {
+                equippedPet.addMovement(movement);
+            }
+        }
+
         equippedPets.add(equippedPet);
     }
 
@@ -146,9 +166,12 @@ public class PetsPlayer {
 
     public void unequipPet(@NotNull String petId) {
         for (EquippedPet equippedPet : equippedPets) {
-            if (equippedPet.petId().equals(petId)) {
-                equippedPet.armorStand().remove();
+            if (equippedPet.getPetId().equals(petId)) {
+                equippedPet.getArmorStand().remove();
                 equippedPets.remove(equippedPet);
+
+                Movement movement = equippedPet.getCurrentMovement();
+                if (movement != null) movement.stop();
                 break;
             }
         }
@@ -179,6 +202,7 @@ public class PetsPlayer {
 
         pets.remove(petId);
         playerData.set(PlayerHandler.PLAYER_DATA_PATH_PETS_INVENTORY, pets);
+        // TODO: check if equipped
         return true;
     }
 
