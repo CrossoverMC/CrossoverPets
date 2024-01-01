@@ -1,0 +1,60 @@
+pet-positions:
+  distance: 2.0
+  angles:
+    1: [ 90 ]
+    2: [ 90, 270 ]
+    3: [ 60, 180, 300 ]
+    4: [ 60, 150, 210, 300 ]
+    5: [ 60, 120, 180, 240, 300 ]
+
+pet-slots:
+  basic: [ 20, 21, 22 ]
+  extra: [ 23, 24 ] # requires permission "crossoverpets.extrapets"
+  items:
+    locked: # {slot}
+      material: BLACK_STAINED_GLASS_PANE
+      name: "&6&lPet Slot {slot}"
+      lore:
+        - "&c&lLocked"
+        - "&7This is a pet slot."
+    pet: # {name}
+      name: "&6&l{name}"
+      lore: # {description}
+        - "{description}"
+        - ""
+        - "&a&lClick &7to unequip this pet"
+    unused: # {slot}
+      material: BLACK_STAINED_GLASS_PANE
+      name: "&6&lPet Slot {slot}"
+      lore:
+        - "&7This is a pet slot."
+
+pets-menu:
+  rows: 6
+  title: "Your Pets ({page}/{pages})" # {page} {pages}
+  pet-slots: [ 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25 ]
+  items:
+    pet: # {name}
+      name: "&6&l{name}"
+      lore: # {description}
+        - "{description}"
+        - ""
+        - "&a&lClick &7to equip this pet"
+    next:
+      material: ARROW
+      name: "&6&lNext Page"
+      lore:
+        - "&a&lClick &7to go to the next page"
+      slot: 59
+    previous:
+      material: ARROW
+      name: "&6&lPrevious Page"
+      lore:
+        - "&a&lClick &7to go to the previous page"
+      slot: 56
+
+messages:
+  max-equipped-pets:
+    - "&cYou cannot equip any more pets!"
+  pet-already-equipped:
+    - "&cYou already have that pet equipped!"

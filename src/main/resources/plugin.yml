@@ -1,0 +1,14 @@
+name: CrossoverPets
+version: '${project.version}'
+main: me.cable.crossover.pets.CrossoverPets
+api-version: 1.20
+
+depend:
+  - "CrossoverMain"
+
+commands:
+  crossoverpets:
+    aliases: [ "cp" ]
+    permission: "crossoverpets.command.crossoverpets"
+  pets:
+    permission: "crossoverpets.command.pets"
