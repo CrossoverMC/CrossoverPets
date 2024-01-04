@@ -19,5 +19,5 @@ dog:
       walk:
         enabled: false
         radius-min: 3.5
-        radius-max: 3.5
+        radius-max: 5.0
         speed: 0.15

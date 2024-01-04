@@ -38,7 +38,7 @@ public class OrbitMovement extends Movement {
     public void start() {
         int duration = getSettings().integer("duration");
         double radius = getSettings().integer("radius");
-        double angleInterval = 360.0 / (duration * 20);
+        double angleInterval = 360.0 / duration;
 
         task = new BukkitRunnable() {
 

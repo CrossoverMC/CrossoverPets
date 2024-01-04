@@ -1,6 +1,7 @@
 package me.cable.crossover.pets.menu;
 
 import me.cable.crossover.main.handler.PlayerData;
+import me.cable.crossover.main.menu.PagedMenu;
 import me.cable.crossover.main.util.ConfigHelper;
 import me.cable.crossover.main.util.ItemBuilder;
 import me.cable.crossover.pets.handler.PetsConfigHandler;
@@ -19,6 +20,8 @@ public class PetsMenu extends PagedMenu {
 
     public PetsMenu(@NotNull Player player) {
         super(player);
+
+        handleCustomItems(SettingsHandler.getConfig().csnn("pets-menu.items.custom"));
 
         onClick((e, tag) -> {
             if (tag != null && tag.startsWith("PET_")) {

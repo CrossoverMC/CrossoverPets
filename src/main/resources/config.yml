@@ -20,6 +20,11 @@ pet-slots:
       lore:
         - "&7This is a pet slot."
 
+shop-pet-item: # {name}
+  name: "&6&l{name}"
+  lore: # {description}
+    - "{description}"
+
 pets-menu:
   rows: 6
   title: "Your Pets ({page}/{pages})" # {page} {pages}
@@ -43,6 +48,11 @@ pets-menu:
       lore:
         - "&a&lClick &7to go to the previous page"
       slot: 56
+    custom:
+      background:
+        material: BLACK_STAINED_GLASS_PANE
+        name: ""
+        outline: true
 
 messages:
   max-equipped-pets:

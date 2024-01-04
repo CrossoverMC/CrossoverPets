@@ -202,7 +202,14 @@ public class PetsPlayer {
 
         pets.remove(petId);
         playerData.set(PlayerHandler.PLAYER_DATA_PATH_PETS_INVENTORY, pets);
-        // TODO: check if equipped
+
+        for (EquippedPet equippedPet : getEquippedPets()) {
+            if (equippedPet.getPetId().equals(petId)) {
+                unequipPet(petId);
+                break;
+            }
+        }
+
         return true;
     }
 
