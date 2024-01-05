@@ -4,7 +4,7 @@ import me.cable.crossover.main.util.Color;
 import me.cable.crossover.pets.CrossoverPets;
 import me.cable.crossover.pets.handler.PetsConfigHandler;
 import me.cable.crossover.pets.handler.PlayerHandler;
-import me.cable.crossover.pets.handler.SettingsHandler;
+import me.cable.crossover.pets.handler.SettingsConfigHandler;
 import me.cable.crossover.pets.instance.PetsPlayer;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -18,12 +18,12 @@ import java.util.List;
 
 public class MainCommand extends CustomCommand {
 
-    private final SettingsHandler settingsHandler;
+    private final SettingsConfigHandler settingsConfigHandler;
     private final PetsConfigHandler petsConfigHandler;
 
     public MainCommand(@NotNull CrossoverPets crossoverPets) {
         super(crossoverPets);
-        settingsHandler = crossoverPets.getSettingsHandler();
+        settingsConfigHandler = crossoverPets.getSettingsConfigHandler();
         petsConfigHandler = crossoverPets.getPetsConfigHandler();
     }
 
@@ -89,7 +89,7 @@ public class MainCommand extends CustomCommand {
                 long millis = System.currentTimeMillis();
                 Player player = (sender instanceof Player p) ? p : null;
 
-                settingsHandler.load(player);
+                settingsConfigHandler.load(player);
                 petsConfigHandler.load(player);
 
                 sender.sendMessage(Color.SUCCESS + "Configuration reloaded in "

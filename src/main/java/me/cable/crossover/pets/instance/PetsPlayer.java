@@ -5,7 +5,7 @@ import me.cable.crossover.main.util.ConfigHelper;
 import me.cable.crossover.main.util.ItemBuilder;
 import me.cable.crossover.pets.handler.PetsConfigHandler;
 import me.cable.crossover.pets.handler.PlayerHandler;
-import me.cable.crossover.pets.handler.SettingsHandler;
+import me.cable.crossover.pets.handler.SettingsConfigHandler;
 import me.cable.crossover.pets.movement.*;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -25,11 +25,11 @@ public class PetsPlayer {
     private final List<EquippedPet> equippedPets = new ArrayList<>();
 
     private static @NotNull List<Integer> getBasicSlots() {
-        return SettingsHandler.getConfig().intList("pet-slots.basic");
+        return SettingsConfigHandler.getConfig().intList("pet-slots.basic");
     }
 
     private static @NotNull List<Integer> getExtraSlots() {
-        return SettingsHandler.getConfig().intList("pet-slots.extra");
+        return SettingsConfigHandler.getConfig().intList("pet-slots.extra");
     }
 
     public PetsPlayer(@NotNull Player player) {
@@ -94,9 +94,9 @@ public class PetsPlayer {
 
         Inventory inv = player.getInventory();
         ItemBuilder lockedItem = new ItemBuilder()
-                .config(SettingsHandler.getConfig().csnn("pet-slots.items.locked"));
+                .config(SettingsConfigHandler.getConfig().csnn("pet-slots.items.locked"));
         ItemBuilder unusedItem = new ItemBuilder()
-                .config(SettingsHandler.getConfig().csnn("pet-slots.items.unused"));
+                .config(SettingsConfigHandler.getConfig().csnn("pet-slots.items.unused"));
         ItemBuilder extraSlotsItem = (canHaveExtraPets() ? unusedItem : lockedItem);
 
         for (int i = 0; i < basicSlots.size(); i++) {
@@ -111,7 +111,7 @@ public class PetsPlayer {
             String equippedPetId = equippedPets.get(i).getPetId();
             ConfigHelper petConfig = PetsConfigHandler.getConfig().ch(equippedPetId);
             ItemStack item = new ItemBuilder()
-                    .config(SettingsHandler.getConfig().csnn("pet-slots.items.pet"))
+                    .config(SettingsConfigHandler.getConfig().csnn("pet-slots.items.pet"))
                     .hdb(petConfig.integer("hdb"))
                     .placeholder("name", petConfig.snn("name"))
                     .lorePlaceholder("description", PetsConfigHandler.getPetDescription(equippedPetId))

@@ -1,8 +1,8 @@
 package me.cable.crossover.pets.command;
 
+import me.cable.crossover.main.util.Color;
 import me.cable.crossover.pets.CrossoverPets;
 import me.cable.crossover.pets.menu.PetsMenu;
-import me.cable.crossover.main.util.Color;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -21,7 +21,7 @@ public class PetsCommand extends CustomCommand {
             return true;
         }
 
-        new PetsMenu(player).open();
+        new PetsMenu(player, false).open();
         return true;
     }
 }

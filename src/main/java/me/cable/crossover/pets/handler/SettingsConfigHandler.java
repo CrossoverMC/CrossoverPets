@@ -10,14 +10,14 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 
-public class SettingsHandler {
+public class SettingsConfigHandler {
 
     private final CrossoverPets crossoverPets;
 
     private final File file;
     private static YamlConfiguration config;
 
-    public SettingsHandler(@NotNull CrossoverPets crossoverPets) {
+    public SettingsConfigHandler(@NotNull CrossoverPets crossoverPets) {
         this.crossoverPets = crossoverPets;
         file = new File(crossoverPets.getDataFolder(), "config.yml");
         load(null);

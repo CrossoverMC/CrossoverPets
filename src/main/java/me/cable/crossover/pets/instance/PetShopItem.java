@@ -6,7 +6,7 @@ import me.cable.crossover.main.util.ConfigHelper;
 import me.cable.crossover.main.util.ItemBuilder;
 import me.cable.crossover.pets.handler.PetsConfigHandler;
 import me.cable.crossover.pets.handler.PlayerHandler;
-import me.cable.crossover.pets.handler.SettingsHandler;
+import me.cable.crossover.pets.handler.SettingsConfigHandler;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class PetShopItem extends ShopItem {
         String petId = petId();
         ConfigHelper petConfig = PetsConfigHandler.getConfig().ch(petId);
         return new ItemBuilder()
-                .config(SettingsHandler.getConfig().csnn("shop-pet-item"))
+                .config(SettingsConfigHandler.getConfig().csnn("shop-pet-item"))
                 .hdb(petConfig.integer("hdb"))
                 .placeholder("name", petConfig.snn("name"))
                 .lorePlaceholder("description", PetsConfigHandler.getPetDescription(petId))

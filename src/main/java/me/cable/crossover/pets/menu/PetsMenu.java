@@ -1,15 +1,17 @@
 package me.cable.crossover.pets.menu;
 
 import me.cable.crossover.main.handler.PlayerData;
+import me.cable.crossover.main.menu.MainMenu;
 import me.cable.crossover.main.menu.PagedMenu;
 import me.cable.crossover.main.util.ConfigHelper;
 import me.cable.crossover.main.util.ItemBuilder;
 import me.cable.crossover.pets.handler.PetsConfigHandler;
 import me.cable.crossover.pets.handler.PlayerHandler;
-import me.cable.crossover.pets.handler.SettingsHandler;
+import me.cable.crossover.pets.handler.SettingsConfigHandler;
 import me.cable.crossover.pets.instance.PetsPlayer;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -18,23 +20,36 @@ import java.util.List;
 
 public class PetsMenu extends PagedMenu {
 
-    public PetsMenu(@NotNull Player player) {
+    private static final String CONFIG_PATH = "pets-menu";
+
+    public PetsMenu(@NotNull Player player, boolean showBack) {
         super(player);
 
-        handleCustomItems(SettingsHandler.getConfig().csnn("pets-menu.items.custom"));
+        handleCustomItems(SettingsConfigHandler.getConfig().csnn(CONFIG_PATH + ".items.custom"));
+
+        render(inv -> {
+            if (showBack) {
+                new ItemBuilder().config(SettingsConfigHandler.getConfig().csnn(CONFIG_PATH + ".items.back"))
+                        .pd(itemKey, "BACK")
+                        .place(inv);
+            }
+        });
 
         onClick((e, tag) -> {
-            if (tag != null && tag.startsWith("PET_")) {
-                String petId = tag.substring("PET_".length());
+            if (e.getClick() != ClickType.LEFT || tag == null) return;
 
+            if (tag.equals("BACK")) {
+                new MainMenu(player).open();
+            } else if (tag.startsWith("PET_")) {
+                String petId = tag.substring("PET_".length());
                 PetsPlayer petsPlayer = PlayerHandler.getPlayer(player);
 
                 if (petsPlayer.hasPetEquipped(petId)) {
-                    SettingsHandler.getConfig().message("messages.pet-already-equipped").send(player);
+                    SettingsConfigHandler.getConfig().message("messages.pet-already-equipped").send(player);
                     return;
                 }
                 if (petsPlayer.getTotalEquipped() >= petsPlayer.getMaxEquipped()) {
-                    SettingsHandler.getConfig().message("messages.max-equipped-pets").send(player);
+                    SettingsConfigHandler.getConfig().message("messages.max-equipped-pets").send(player);
                     return;
                 }
 
@@ -45,12 +60,12 @@ public class PetsMenu extends PagedMenu {
 
     @Override
     protected @NotNull String title() {
-        return SettingsHandler.getConfig().snn("pets-menu.title");
+        return SettingsConfigHandler.getConfig().snn(CONFIG_PATH + ".title");
     }
 
     @Override
     protected int rows() {
-        return SettingsHandler.getConfig().integer("pets-menu.rows");
+        return SettingsConfigHandler.getConfig().integer(CONFIG_PATH + ".rows");
     }
 
     @Override
@@ -65,12 +80,12 @@ public class PetsMenu extends PagedMenu {
 
             ConfigHelper petConfig = PetsConfigHandler.getConfig().ch(petId);
             ItemStack item = new ItemBuilder()
-                    .config(SettingsHandler.getConfig().csnn("pets-menu.items.pet"))
+                    .config(SettingsConfigHandler.getConfig().csnn(CONFIG_PATH + ".items.pet"))
                     .hdb(petConfig.integer("hdb"))
                     .placeholder("name", petConfig.snn("name"))
                     .lorePlaceholder("description", PetsConfigHandler.getPetDescription(petId))
+                    .pd(itemKey, "PET_" + petId)
                     .create();
-            tag(item, "PET_" + petId);
             items.add(item);
         }
 
@@ -79,16 +94,16 @@ public class PetsMenu extends PagedMenu {
 
     @Override
     protected @NotNull List<Integer> itemSlots() {
-        return SettingsHandler.getConfig().intList("pets-menu.pet-slots");
+        return SettingsConfigHandler.getConfig().intList(CONFIG_PATH + ".pet-slots");
     }
 
     @Override
     protected @NotNull ItemBuilder nextItem() {
-        return new ItemBuilder().config(SettingsHandler.getConfig().csnn("pets-menu.items.next"));
+        return new ItemBuilder().config(SettingsConfigHandler.getConfig().csnn(CONFIG_PATH + ".items.next"));
     }
 
     @Override
     protected @NotNull ItemBuilder previousItem() {
-        return new ItemBuilder().config(SettingsHandler.getConfig().csnn("pets-menu.items.previous"));
+        return new ItemBuilder().config(SettingsConfigHandler.getConfig().csnn(CONFIG_PATH + ".items.previous"));
     }
 }

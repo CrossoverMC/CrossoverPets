@@ -30,18 +30,24 @@ pets-menu:
   title: "Your Pets ({page}/{pages})" # {page} {pages}
   pet-slots: [ 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25 ]
   items:
-    pet: # {name}
-      name: "&6&l{name}"
-      lore: # {description}
-        - "{description}"
-        - ""
-        - "&a&lClick &7to equip this pet"
+    back:
+      material: ARROW
+      name: "&6&lBack"
+      lore:
+        - "&7Go back to the &eMain Menu"
+      slot: 27
     next:
       material: ARROW
       name: "&6&lNext Page"
       lore:
         - "&a&lClick &7to go to the next page"
       slot: 59
+    pet: # {name}
+      name: "&6&l{name}"
+      lore: # {description}
+        - "{description}"
+        - ""
+        - "&a&lClick &7to equip this pet"
     previous:
       material: ARROW
       name: "&6&lPrevious Page"
