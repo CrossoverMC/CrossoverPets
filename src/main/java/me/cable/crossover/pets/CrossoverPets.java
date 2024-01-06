@@ -1,8 +1,8 @@
 package me.cable.crossover.pets;
 
+import me.cable.crossover.main.handler.InventoryPlacers;
 import me.cable.crossover.main.menu.MainMenu;
 import me.cable.crossover.main.shop.ShopItem;
-import me.cable.crossover.main.task.InventoryItemsTask;
 import me.cable.crossover.pets.command.MainCommand;
 import me.cable.crossover.pets.command.PetsCommand;
 import me.cable.crossover.pets.handler.MovementHandler;
@@ -38,7 +38,7 @@ public final class CrossoverPets extends JavaPlugin {
         registerCommands();
         ShopItem.register("pet", PetShopItem::new);
         MainMenu.petsMenuFactory = player -> new PetsMenu(player, true);
-        InventoryItemsTask.registerPlacer(player -> PlayerHandler.getPlayer(player).updateInventoryPetSlots());
+        InventoryPlacers.register(player -> PlayerHandler.getPlayer(player).updateInventoryPetSlots());
     }
 
     @Override
