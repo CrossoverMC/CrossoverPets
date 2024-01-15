@@ -22,6 +22,11 @@ public class FollowMovement extends Movement {
     }
 
     @Override
+    public boolean strictlyOverride() {
+        return true;
+    }
+
+    @Override
     public boolean override() {
         double distance = getSettings().doub("trigger-distance");
         return player.getLocation().distanceSquared(equippedPet.getArmorStand().getLocation()) > distance * distance;

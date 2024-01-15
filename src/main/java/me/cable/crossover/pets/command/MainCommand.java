@@ -91,6 +91,7 @@ public class MainCommand extends CustomCommand {
 
                 settingsConfigHandler.load(player);
                 petsConfigHandler.load(player);
+                PlayerHandler.reloadEquippedPets();
 
                 sender.sendMessage(Color.SUCCESS + "Configuration reloaded in "
                         + Color.SPECIAL + (System.currentTimeMillis() - millis) + Color.SUCCESS + " ms.");

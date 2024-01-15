@@ -42,13 +42,17 @@ public abstract class Movement {
 
     public abstract @NotNull String id();
 
+    public boolean strictlyOverride() {
+        return false;
+    }
+
     public boolean override() {
         return false;
     }
 
     public abstract void start();
 
-    public abstract void stop();
+    public void stop() {}
 
     protected final @NotNull Location getGroundLocation(@NotNull Location loc) {
         Block groundBlock = loc.getBlock();

@@ -22,10 +22,10 @@ public class MovementHandler {
     }
 
     private void equippedPetTick(@NotNull EquippedPet equippedPet) {
-        List<Movement> movements = equippedPet.getMovements();
+        List<Movement> allMovements = equippedPet.getMovements();
         Movement currentMovement = equippedPet.getCurrentMovement();
 
-        for (Movement m : movements) {
+        for (Movement m : allMovements) {
             if (m.override() && (currentMovement == null || currentMovement.getClass() != m.getClass())) {
                 if (currentMovement != null) currentMovement.stop();
                 startMovement(equippedPet, m);
@@ -33,9 +33,13 @@ public class MovementHandler {
             }
         }
 
-        if (currentMovement == null && equippedPet.isMovementReady() && !movements.isEmpty()) {
-            Movement movement = movements.get((int) (Math.random() * movements.size()));
-            startMovement(equippedPet, movement);
+        if (currentMovement == null && equippedPet.isMovementReady()) {
+            List<Movement> availableMovements = allMovements.stream().filter(a -> !a.strictlyOverride()).toList();
+
+            if (!availableMovements.isEmpty()) {
+                Movement movement = availableMovements.get((int) (Math.random() * availableMovements.size()));
+                startMovement(equippedPet, movement);
+            }
         }
     }
 

@@ -39,12 +39,26 @@ public class PetsPlayer {
 
     private void loadEquippedPets() {
         YamlConfiguration playerData = PlayerData.get(player.getUniqueId());
+        equipPets(playerData.getStringList(PlayerHandler.PLAYER_DATA_PATH_PETS_EQUIPPED));
+    }
 
-        for (String petId : playerData.getStringList(PlayerHandler.PLAYER_DATA_PATH_PETS_EQUIPPED)) {
+    public void reloadEquippedPets() {
+        List<String> equippedPetIds = equippedPets.stream().map(EquippedPet::getPetId).toList();
+        unequipPets();
+        equipPets(equippedPetIds);
+    }
+
+    private void equipPets(@NotNull List<String> petIds) {
+        for (String petId : petIds) {
             if (PetsConfigHandler.isPetValid(petId)) {
                 equipPetInternal(petId);
             }
         }
+    }
+
+    private void unequipPets() {
+        equippedPets.forEach(a -> a.getArmorStand().remove());
+        equippedPets.clear();
     }
 
     public void cleanup() {
@@ -52,10 +66,7 @@ public class PetsPlayer {
         YamlConfiguration playerData = PlayerData.get(player.getUniqueId());
         List<String> ep = equippedPets.stream().map(EquippedPet::getPetId).toList();
         playerData.set(PlayerHandler.PLAYER_DATA_PATH_PETS_EQUIPPED, ep);
-
-        for (EquippedPet equippedPet : equippedPets) {
-            equippedPet.getArmorStand().remove();
-        }
+        unequipPets();
     }
 
     public @NotNull List<EquippedPet> getEquippedPets() {
@@ -154,6 +165,10 @@ public class PetsPlayer {
             if (petConfig.bool("movement.types." + movement.id() + ".enabled")) {
                 equippedPet.addMovement(movement);
             }
+        }
+
+        if (!petConfig.bool("movement.types.orbit.enabled")) {
+            equippedPet.addMovement(new TeleportMovement(equippedPet, player));
         }
 
         equippedPets.add(equippedPet);

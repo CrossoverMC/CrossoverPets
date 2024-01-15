@@ -46,9 +46,11 @@ public final class PlayerHandler {
         }
     }
 
+    public static void reloadEquippedPets() {
+        players.forEach(PetsPlayer::reloadEquippedPets);
+    }
+
     public static void cleanup() {
-        for (PetsPlayer petsPlayer : players) {
-            petsPlayer.cleanup();
-        }
+        players.forEach(PetsPlayer::cleanup);
     }
 }
