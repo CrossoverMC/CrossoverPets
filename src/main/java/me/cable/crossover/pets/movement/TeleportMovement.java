@@ -1,7 +1,6 @@
 package me.cable.crossover.pets.movement;
 
 import me.cable.crossover.pets.instance.EquippedPet;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -36,7 +35,6 @@ public class TeleportMovement extends Movement {
 
     @Override
     public void start() {
-        Bukkit.broadcastMessage("teleporting: " + equippedPet.getPetId());
         armorStand.teleport(player.getLocation().subtract(0, getBodyHeight(), 0));
         finish();
     }
